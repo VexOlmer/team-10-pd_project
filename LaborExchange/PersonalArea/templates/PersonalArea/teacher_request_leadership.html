@@ -1,0 +1,63 @@
+{% extends 'PersonalArea/base_teacher.html' %}
+{% load static %}
+
+{% block content_teacher %}
+
+{% if leaders|length == 0 %}
+<h2 style=" font-size: 1.5em; text-align: center; margin-bottom: 0px;">На данный момент заявок на лидерство
+    нет</h2>
+{% else %}
+<div class="log-body log-body-teacher-profile" style="padding: 0; ">
+    <div class="filterAncContainer desktop">
+        <div class="filter-container" style="width: 400px;">
+            <ul class="filter-container-ul" style="width: 100%; max-width: 300px; height: 300px; min-width: 300px;">
+                <li class="title-ul">Студенты, подавшие заявку:</li>
+                {% for leader in leaders %}
+                <li>
+
+                    <button class="btn-show-anc"
+                            onclick="$(function(){$('#includemyHTML').load('{% url 'accept_req_leader' student_id=leader.id %}')});">
+                        {{leader.fio}}
+                    </button>
+
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="includemyHTML" style="margin-left: auto;">
+        </div>
+    </div>
+    <div class="mobile">
+        <div class="filterAncContainer" style="align-items: center;justify-content: center;">
+            <div class="filter-container mobile" style="width: 95%;">
+                <ul class="filter-container-ul-mobile" style="max-width:none;">
+                    <li class="title-ul">Студенты, подавшие заявку:</li>
+                    {% for leader in leaders %}
+                    <li>
+                        <button class="btn-show-anc" data-toggle="modal"
+                                data-target="#myModal_{{student.number}}"
+                                onclick="$(function(){$('#includemyHTML1').load('{% url 'accept_req_leader' student_id=leader.id %}')});">
+                            {{leader.fio}}
+                        </button>
+
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="modal fade" id="myModal_{{student.number}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog modal-dialog-centered" id="modal-t-request1" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="includemyHTML1">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content_teacher %}

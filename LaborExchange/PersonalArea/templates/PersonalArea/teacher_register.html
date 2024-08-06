@@ -1,0 +1,74 @@
+{% extends 'PersonalArea/base_full.html' %}
+{% load static %}
+
+{% block content %}
+
+<body>
+
+<main style="margin: auto; margin-bottom: 25%;">
+    <div class="log-form-auto log-reg">
+        <div class="logo">
+            <img class="logo-img" src="{% static 'PersonalArea/img/logo.svg' %}" alt="logo">
+            <span class="logo-description">HELLO <br> TEAM! </span>
+            <img class="triangle" src="{% static 'PersonalArea/img/triangle.png' %}" alt="triangle">
+        </div>
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Регистрация нового профиля сотрудника кафедры</h5>
+            </div>
+            <div class="modal-body">
+                <div class="log-form-auto">
+                    <div class="login-modal">
+                        <div class="log-body">
+
+                            <form action={% url 'teacher_register' %}  method="post">
+                                {% csrf_token %}
+
+                                <div class="form-error">{{ form.non_field_errors }}</div>
+
+                                {% for f in form %}
+                                <div class="form-group">
+                                    {% comment %} <label class="form-label" for="{{ f.id_for_label }}"></label> {% endcomment %}
+                                    {{ f }}
+                                </div>
+                                <div class="form-error">{{ f.errors }}</div>
+                            {% endfor %}
+
+                                <div style="text-align: center;">
+                                    <button type="submit" class="btn btn-primary btn-lg  " style="width: 149px;">Регистрация</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="exit" style="display:grid; grid-template-columns: 50px 1fr;">
+                    <img src="{% static 'PersonalArea/img/exit.png' %}" width="45" height="45" alt="Выход">
+                    <a href="{% url 'home_auth' %}"><span>Вернуться обратно</span></a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+{% comment %} <footer class="page-footer">
+
+    <span class="copyright">Омский государственный технический университет © 2021 Все права защищены</span> {% endcomment %}
+
+</footer>
+<script src="{% static 'PersonalArea/js/show-LEHA.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/js/bootstrap.min.js"
+        integrity="sha512-UR25UO94eTnCVwjbXozyeVd6ZqpaAE9naiEUBK/A+QDbfSTQFhPGj5lOR6d8tsgbBk84Ggb5A3EkjsOgPRPcKA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+{% comment %} <script src="{{url_for('static', filename='index-register-window.js')}}"></script> {% endcomment %}
+
+</body>
+
+{% endblock content %}

@@ -1,0 +1,165 @@
+{% extends 'PersonalArea/base_leader.html' %}
+{% load static %}
+
+{% block content_leader %}
+
+    <div class="log-header" style="padding: 15px;">
+        <div id="myBtnContainer" style="">
+            <button class="btn-filter active primary" onclick="filterSelection('frontend')"> Frontend</button>
+            <button class="btn-filter primary" onclick="filterSelection('backend')"> Backend</button>
+            <button class="btn-filter primary" onclick="filterSelection('designer')"> Designer</button>
+        </div>
+    </div>
+
+{% for student in student_no_team %}
+<div class="modal fade" id="myModal_{{student.user_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog modal-dialog-centered" id="modal-t-request1" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+            <div id="includemyHTML1" class="includemyHTML1"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ {% endfor %}
+    {% if not full_team %}
+    <div class="log-body log-body-leader-profile" style="padding: 0; ">
+        <div class="filterAncContainer desktop">
+        <div class="filter-container" style="width: 100%; max-width: 300px; height: 300px; min-width: 300px;">
+                <ul class="filter-container-ul">
+                    <li class="title-ul">Студент с данной компетенцией</li>
+                    {% for student in backend %}
+                    <li class="filterDiv backend">
+                        <button class="btn-show-anc" onclick="$(function(){$('#includemyHTML').load('{% url 'leader_filter_profile' student_id=student.id %}');
+        });">{{student.fio}}
+                        </button>
+                        {% comment %} <a href="{% url 'leader_filter_profile' user_id=student.id %}">{{student.fio}}</a> {% endcomment %}
+                    </li>
+                    {% endfor %}
+                    {% for student in frontend %}
+                    <li class="filterDiv frontend">
+                        <button class="btn-show-anc" onclick="$(function(){$('#includemyHTML').load('{% url 'leader_filter_profile' student_id=student.id %}');
+        });">{{student.fio}}
+                        </button>
+                        {% comment %} <a href="{% url 'leader_filter_profile' user_id=student.id %}">{{student.fio}}</a> {% endcomment %}
+
+                    </li>
+                    {% endfor %}
+                    {% for student in designer %}
+                    <li class="filterDiv designer">
+                        <button class="btn-show-anc" onclick="$(function(){$('#includemyHTML').load('{% url 'leader_filter_profile' student_id=student.id %}');
+        });">{{student.fio}}
+                        </button>
+                        {% comment %} <a href="{% url 'leader_filter_profile' user_id=student.id %}">{{student.fio}}</a> {% endcomment %}
+
+                    </li>
+                    {% endfor %}
+                    {% for student in arch %}
+                    <li class="filterDiv architect">
+                        <button class="btn-show-anc" onclick="$(function(){$('#includemyHTML').load('{% url 'leader_filter_profile' student_id=student.id %}');
+        });">{{student.fio}}
+                        </button>
+                        {% comment %} <a href="{% url 'leader_filter_profile' user_id=student.id %}">{{student.fio}}</a> {% endcomment %}
+
+                    </li>
+                    {% endfor %}
+                    {% for student in math %}
+                    <li class="filterDiv mathematic">
+                        <button class="btn-show-anc" onclick="$(function(){$('#includemyHTML').load('{% url 'leader_filter_profile' student_id=student.id %}');
+        });">{{student.fio}}
+                        </button>
+                        {% comment %} <a href="{% url 'leader_filter_profile' user_id=student.id %}">{{student.fio}}</a> {% endcomment %}
+
+                    </li>
+                    {% endfor %}
+                    {% for student in manager %}
+                    <li class="filterDiv manager">
+                        <button class="btn-show-anc" onclick="$(function(){$('#includemyHTML').load('{% url 'leader_filter_profile' student_id=student.id %}');
+        });">{{student.fio}}
+                        </button>
+
+                        {% comment %} <a href="{% url 'leader_filter_profile' user_id=student.id %}">{{student.fio}}</a> {% endcomment %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div id="includemyHTML" style="flex: 1; width: 100%;">
+            </div>
+        </div>
+        <div class="mobile">
+        <div class="filterAncContainer" style="display: block;">
+        <div class="filter-container" style="width: 100%; max-width: 300px; height: 300px; min-width: 300px;margin-left: auto; margin-right: auto;">
+                <ul class="filter-container-ul-mobile" style="margin-left: auto; margin-right: auto;">
+                    <li class="title-ul">Студент с данной компетенцией</li>
+                    {% for student in backend %}
+                    <li class="filterDiv backend">
+                        <button class="btn-show-anc" onclick="$(function(){$('.includemyHTML1').load('{% url 'leader_filter_profile' student_id=student.id %}')});
+        " data-target="#myModal_{{student.id}}" data-toggle="modal">{{student.fio}}
+                        </button>
+                        {% comment %} <a href="{% url 'leader_filter_profile' user_id=student.id %}">{{student.fio}}</a> {% endcomment %}
+                    </li>
+                    {% endfor %}
+                    {% for student in frontend %}
+                    <li class="filterDiv frontend">
+                        <button class="btn-show-anc" onclick="$(function(){$('.includemyHTML1').load('{% url 'leader_filter_profile' student_id=student.id %}')});"
+                                data-target="#myModal_{{student.id}}" data-toggle="modal">{{student.fio}}
+                        </button>
+                        {% comment %} <a href="{% url 'leader_filter_profile' user_id=student.id %}">{{student.fio}}</a> {% endcomment %}
+
+                    </li>
+                    {% endfor %}
+                    {% for student in designer %}
+                    <li class="filterDiv designer">
+                        <button class="btn-show-anc" onclick="$(function(){$('.includemyHTML1').load('{% url 'leader_filter_profile' student_id=student.id %}')});
+        " data-target="#myModal_{{student.id}}" data-toggle="modal">{{student.fio}}
+                        </button>
+                        {% comment %} <a href="{% url 'leader_filter_profile' user_id=student.id %}">{{student.fio}}</a> {% endcomment %}
+
+                    </li>
+                    {% endfor %}
+                    {% for student in arch %}
+                    <li class="filterDiv architect">
+                        <button class="btn-show-anc" onclick="$(function(){$('.includemyHTML1').load('{% url 'leader_filter_profile' student_id=student.id %}')});
+        " data-target="#myModal_{{student.id}}" data-toggle="modal">{{student.fio}}
+                        </button>
+                        {% comment %} <a href="{% url 'leader_filter_profile' user_id=student.id %}">{{student.fio}}</a> {% endcomment %}
+
+                    </li>
+                    {% endfor %}
+                    {% for student in math %}
+                    <li class="filterDiv mathematic">
+                        <button class="btn-show-anc" onclick="$(function(){$('.includemyHTML1').load('{% url 'leader_filter_profile' student_id=student.id %}')});
+        " data-target="#myModal_{{student.id}}" data-toggle="modal">{{student.fio}}
+                        </button>
+                        {% comment %} <a href="{% url 'leader_filter_profile' user_id=student.id %}">{{student.fio}}</a> {% endcomment %}
+
+                    </li>
+                    {% endfor %}
+                    {% for student in manager %}
+                    <li class="filterDiv manager">
+                        <button class="btn-show-anc" onclick="$(function(){$('.includemyHTML1').load('{% url 'leader_filter_profile' student_id=student.id %}')});
+        " data-target="#myModal_{{student.id}}" data-toggle="modal">{{student.fio}}
+                        </button>
+
+                        {% comment %} <a href="{% url 'leader_filter_profile' user_id=student.id %}">{{student.fio}}</a> {% endcomment %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        </div>
+    </div>
+ {% else %}
+
+
+<h2 style=" font-size: 1.5em; text-align: center; margin-bottom: 0px;">На данный момент в Вашей команде максимальное
+    число участников. По умолчанию это число равняется пяти, но если Вы считаете нужным, то можете обратиться к своему
+    куратору, чтобы он изменил число участников в команде</h2>
+    {% endif %}
+
+<script src="{% static 'PersonalArea/js/filter.js' %}"></script>
+<script src="{% static 'PersonalArea/js/show-student.js' %}"></script>
+<script src="{% static 'PersonalArea/js/show-anc.js' %}"></script>
+
+{% endblock content_leader %}

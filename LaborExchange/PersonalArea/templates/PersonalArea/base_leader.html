@@ -1,0 +1,73 @@
+{% extends 'PersonalArea/base_full.html' %}
+{% load static %}
+
+{% block content %}
+
+<body style="width: 95%;" class="base-leader-body">
+
+<header class="container-header-logo">
+    <div class="logo" style="margin: 0px;">
+        <img class="logo-header-img" src="{% static 'PersonalArea/img/logo.svg' %}" alt="logo" >
+    </div>
+    <div class="logo-header">
+        <div class="logo-profile">
+            <div class="logo-text">
+                <h1 style=" font-size: 2.5em; margin-bottom: 5px; border-bottom: 2.928px dashed #1E202D; padding: 8px; text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);">
+                    HELLO
+                    TEAM!</h1>
+                <h2 style=" font-size: 1.5em; margin-top: 15px; text-align: center; margin-bottom: 0px;">
+                    {{header}} </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="exit-header exit" style="margin-top: auto; margin-bottom: auto;">
+        <img src="{% static 'PersonalArea/img/exit.png' %}" width="45" height="45" alt="Выход">
+        <a href="{% url 'logout' %}"><span>Выйти</span></a>
+    </div>
+</header>
+
+<main>
+
+    <div class="log-form-auto" style="width: 100%">
+
+        <nav class="leader-nav">
+            <ul class="tab-items" style="grid-template-columns: 1fr 1fr 1fr 1fr">
+
+                {% for m in menu %}
+                    {% if m.pick %}  
+                        <li class="tab-item-active">
+                    {% else %}
+                        <li class="tab-item">
+                    {% endif %}
+                        <a href="{% url m.url_name %}">
+                            <div class="pointer">
+                                <div class="img-menu1">
+                                    <img src="{% static m.photo %}" height="300" width="300" alt="home"
+                                        class="img-menu1">
+                                </div>
+                                <div class="menu-txt1">{{m.title}}</div>
+                            </div>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
+
+    {% block content_leader %}
+    {% endblock content_leader %}
+
+</main>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/js/bootstrap.min.js"
+        integrity="sha512-UR25UO94eTnCVwjbXozyeVd6ZqpaAE9naiEUBK/A+QDbfSTQFhPGj5lOR6d8tsgbBk84Ggb5A3EkjsOgPRPcKA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{% static 'PersonalArea/js/checkboxes.js' %}"></script>
+</body>
+
+{% endblock content %}

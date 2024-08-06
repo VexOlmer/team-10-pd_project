@@ -1,0 +1,269 @@
+{% extends 'PersonalArea/base_student.html' %}
+{% load static %}
+
+{% block content_student %}
+
+<div class="modal fade" id="profile_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true"
+     data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-dashed">
+                <div class="modal-body modal-change-info">
+                    <div style="display: grid;">
+                    <form action="#" autocomplete=off name="platform" method="post" id="setting_student" class="change-info-form">
+                    {% csrf_token %}
+
+                            <input type="text" name="group" class="search" placeholder="Группа">
+                            <input type="submit" name="save_setting" class="submit" value="Сохранить">
+
+                            <input type="text" name="email" class="search" placeholder="Почта">
+                            <input type="submit" name="save_setting" class="submit" value="Сохранить">
+
+                            <input type="text" name="fio" class="search" placeholder="Фамилия-Имя">
+                            <input type="submit" name="save_setting" class="submit" value="Сохранить">
+
+                            <textarea placeholder="Изменить описание" name="desc"></textarea>
+                            <input type="submit" name="save_setting" class="submit" value="Сохранить">
+
+                            <div class="modal-footer-close-btn modal-f-auth-1" style="grid-template-columns: 1fr;">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="">Закрыть
+                                </button>
+                            </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog reg-modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="display: grid; grid-template-columns: 1fr 0.1fr; justify-content: center;">
+                <h5 class="modal-title" id="exampleModalLabel" style="margin-left: auto; margin-right: auto;">Отказ в
+                    заявке</h5>
+                {% comment %} <button type="submit" name='del_desc' class="btn-close" data-dismiss="modal"
+                        aria-label="Close" form='del_desc_btn'>
+                    <span aria-hidden="true"></span>
+                </button> {% endcomment %}
+
+                <button type="submit" name='del_desc' class="btn-close" form='del_desc_btn' aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="reg-window" style="display: grid; grid-template-columns: 1fr; text-align: center;">
+                    <span class="desc-list-bool" style="display: none;">{{deny_desc_bool}}</span>
+                    <span class="desc-list">{{denial_desc}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if denial_true %}
+<form action="{% url 'student_profile' %}" name='del_desc' method="POST" id="del_desc_btn">
+    {% csrf_token %}
+    <span class="desc-answer" style="font-size:1.8em; color: red;">Ваша заявка на вступление в команду была отклонена.
+        <a name="delete" data-target="#myModal" data-toggle="modal" class="a-reg" style="cursor: pointer;font-size:1em;">Причина</a>
+    </span>
+</form>
+{% endif %}
+
+<script>
+            let d = document.querySelector('.desc-answer');
+            let c = document.querySelector('.a-reg');
+            console.log(c);
+            c.onclick = function()
+            {
+                console.log('123');
+                d.textContent = "";
+            }
+
+
+
+
+
+
+
+
+</script>
+
+<div class="log-body log-body-leader-profile" style="padding: 0">
+
+    <div class="student-info mobile">
+        <table style="width: 100%;">
+            <tbody>
+            <tr>
+                <th style="width: 150px;">Имя-Фамилия</th>
+            <tr>
+            </tr>
+            <tr>
+                <td> {{fio}}</td>
+            </tr>
+            <tr>
+                <th>Группа</th>
+            </tr>
+            <tr>
+                <td> {{group}}</td>
+            </tr>
+            <tr>
+                <th>Почта</th>
+            </tr>
+            <tr>
+                <td> {{email}}</td>
+            </tr>
+            <tr>
+                <th style="padding: 15px">Компетенции</th>
+            </tr>
+            <tr>
+                <td>
+                    <ul class="skills-table"
+                        style="text-align: left; list-style-image: none; list-style-type: disc; padding-left: 2rem;">
+
+                        {% for elem in skills.all_skills %}
+                        <li style="list-style-image: none; list-style-type: disc;">{{elem}}</li>
+                        {% endfor %}
+
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>Преподлагаемая роль</th>
+            </tr>
+            <tr>
+                <td> {{skills.role}}</td>
+            </tr>
+            <tr>
+                <th>Описание</th>
+            </tr>
+            <tr>
+                <td> {{desc}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="input__wrapper">
+            <button type="button" class="btn btn-secondary" data-toggle="modal"
+                    data-target="#profile_info">
+                Изменить настройки профиля
+            </button>
+        </div>
+    </div>
+
+    <div class="student-info">
+        <table style="width: 100%;">
+            <tbody>
+            <tr>
+                <th style="width: 150px;">Имя-Фамилия</th>
+                <td> {{fio}}</td>
+            </tr>
+            <tr>
+                <th>Группа</th>
+                <td> {{group}}</td>
+            </tr>
+            <tr>
+                <th>Почта</th>
+                <td> {{email}}</td>
+            </tr>
+            <tr>
+                <th style="padding: 15px">Компетенции</th>
+                <td>
+                    <ul class="skills-table"
+                        style="text-align: left; list-style-image: none; list-style-type: disc; padding-left: 2rem;">
+
+                        {% for elem in skills.all_skills %}
+                        <li style="list-style-image: none; list-style-type: disc;">{{elem}}</li>
+                        {% endfor %}
+
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>Предполгаемая роль</th>
+                <td> {{skills.role}}</td>
+            </tr>
+            <tr>
+                <th>Описание</th>
+                <td> {{desc}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="input__wrapper">
+            <button type="button" class="btn btn-secondary" data-toggle="modal"
+                    data-target="#profile_info">
+                Изменить настройки профиля
+            </button>
+        </div>
+    </div>
+
+    <div class="desktop" style="margin-top: auto; margin-bottom: auto;">
+        <div style="display: grid;">
+            {% comment %} <img src="static/img/edit-btn.png" style="margin-left: auto;"> {% endcomment %}
+            <div class="photo-container">
+                {% if photo %}
+                <div class="profile-ava" style=""><img src="{{photo.url}}" class="photo-profile"></div>
+                {% else %}
+                <div class="profile-ava" style=""><img src="{% static 'PersonalArea/img/photo.png' %}"
+                                                       class="photo-profile"></div>
+                {% endif %}
+            </div>
+            {% comment %} <img src="static/img/edit-btn.png" class=""> {% endcomment %}
+            <div class="profile-load">
+                <form action="{% url 'student_profile' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="input-group mb-3" style="display: block; margin-top: 10px;">
+                        <div class="input__wrapper">
+                            <input type="file" name="image" id="input__file" class="input input__file"
+                                   accept="image/*" id="id_image">
+                            <label for="input__file" class="input__file-button">
+                                    <span class="input__file-icon-wrapper"><img class="input__file-icon"
+                                                                                src="{% static 'PersonalArea/img/add.svg' %}"
+                                                                                alt="Выбрать файл"
+                                                                                width="25"></span>
+                                <span class="input__file-button-text">Загрузите фото профиля</span>
+                                {% comment %} {{ form.image }} {% endcomment %}
+                            </label>
+                        </div>
+                        <div class="input__wrapper">
+                            <input type="submit" id="SubmitPhoto" class="input input__file">
+                            <label for="SubmitPhoto" class="input__file-button" style="justify-content: center;">
+                                <span class="input__file-button-text">Сохранить</span>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        let a = document.querySelector('.desc-list-bool');
+        let b = document.querySelector('.desc-list');
+        let b1 = document.querySelector('.desc-answer');
+
+        if (a.textContent == "[]")
+        {
+
+        a.textContent = "";
+        b1.textContent = "";
+        b.textContent = "";
+        }
+        else
+        {
+        a.textContent = "";
+
+        }
+
+
+
+
+
+
+
+
+</script>
+
+{% endblock content_student %}

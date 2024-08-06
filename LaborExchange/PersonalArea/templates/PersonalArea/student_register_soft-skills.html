@@ -1,0 +1,222 @@
+{% extends 'PersonalArea/base_full.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<body>
+
+<div class="modal fade" id="myLeha" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" id="modal-d-reg1" role="document">
+        <div class="modal-content">
+            <div class="modal-dashed">
+
+                <div class="modal-body modal-auth-body">
+                    <img class="LEHA1-questionnaire" src="{% static 'PersonalArea/img/LEHA3.svg' %}">
+                    <p class="LEHA1-description tooltip-text"></p>
+                    <div class="modal-footer-close-btn">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<main style="margin: auto; margin-bottom: 25%; ">
+
+    <div class="form-registr-skills">
+        <form action="{% url 'student_reg_skills' %}" method="post">
+            {% csrf_token %}
+
+            <div class="form-error">{{ form.non_field_errors }}</div>
+
+            <div class="log-form-auto" style="width: 70%;">
+                <header class="questionnaire-header" style="column-gap: 25px;">
+                    <div class="exit-anc exit" style="display:grid; grid-template-columns: 50px 1fr;">
+                        <img src="{% static 'PersonalArea/img/exit.png' %}" width="45" height="45" alt="Выход">
+                        <a href="{% url 'logout' %}"><span>Выйти</span></a>
+                    </div>
+                    <div class="questionnaire-log-header">
+                        <div class="logo-profile">
+                            <div style="margin-left: auto; margin-right: auto; text-align: center; ">
+                                <div class="logo">
+                                    <img class="logo-img" src="{% static 'PersonalArea/img/logo.svg' %}" alt="logo">
+                                    <span class="logo-description">HELLO <br> TEAM! </span>
+                                    <img class="triangle" src="{% static 'PersonalArea/img/triangle.png' %}"
+                                         alt="triangle">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="login">
+                    <img class="Leha-anc" id="LEHA" src="{% static 'PersonalArea/img/LEHA1.svg' %}" alt="logo">
+                    <div class="log-header" style="padding-bottom: 5px;">
+                        <div class="logo-profile" style="margin-left: auto;">
+                            <div style="margin-left: auto;margin-right: auto;">
+
+                                <div class="speech" id="LEHA-text" style="position: relative;">
+                                    <p class="speech">
+                                        <button type="button" class="btn-close btn-close-LEHA" id="close-LEHA"
+                                                onclick=""
+                                                data-dismiss="modal" aria-label="Close" style="margin: 20px;">
+                                            <span aria-hidden="true"></span>
+                                        </button>
+                                        Укажите, какими soft-skills и hard-skills вы обладаете и на каком
+                                        уровне.
+                                        Отвечайте честно, поскольку на основании этих данных
+                                        будет
+                                        формироваться Ваша анкета. Заполнение анкеты займёт всего несколько минут, но
+                                        позволит
+                                        другим пользователям видеть Ваши компетенции
+                                    </p>
+                                </div>
+                                <h1 style="font-style: normal;
+                                    font-weight: 500;
+                                    font-size: 2em;
+                                    line-height: 44px;
+                                    align-items: center;
+                                    text-align: center;
+                                    padding: 15px;
+                                    padding-top: 5px;">
+                                    Заполнение анкеты
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="log-body"
+                         style="border-bottom: 1px solid rgb(230, 230, 242); border-top: 1px solid rgb(230, 230, 242); padding-left: 0; padding-right: 0;">
+                        <div class="div-label-lead">
+                            <div class="role-select">
+                                {{form.leader}}
+                                <label for="leader" style="font-size: 26px;" class="tooltip-checkbox label-lead"
+                                       data-tooltip-text="В обязанности лидера входит организация процесса работы команды,
+                                                        ведение отчётной деятельности,
+                                                        однако он также может принимать непосредственное участие в разработке продукта."
+                                       data-target="#myLeha" data-toggle="modal">
+                                    {{form.leader.label}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Все основные выделения(кроме лидера/наставника/куратора) -->
+
+                    <div class="log-body" style="padding-left: 0; padding-right:0; ">
+
+                        <!-- Soft skills -->
+                        <div class="dropdown-checkbox" style="padding-left: 30px; padding-right: 30px;">
+                            <ul>
+                            {% for f in form %}
+                                {% if f.label != 'Лидер' and f.label != 'Описание' %}
+                                        <li>{{ f }}<label class="label-skill" for="{{ f.id_for_label }}">{{f.label}} </label>
+                                            <div class="form-error">{{ f.errors }}</div></li>
+                                {% endif %}
+                            {% endfor %}
+                            </ul>
+                            {% for f in form %}
+                                {% if f.label == 'Описание' %}
+                                        {{ f }}
+                                            <div class="form-error">{{ f.errors }}</div>
+                                {% endif %}
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+                    {% comment %} <div>
+                        <div class="anc-description"
+                             style="margin-top: 25px; display:grid; grid-template-columns: 1fr; row-gap: 20px;margin-left:0;margin-right:0;border-top: 1px solid white;
+                                 padding-left: 30px; padding-right: 30px; padding-top:25px;">
+                            <span class="step-text" style="position: relative;">Шаг 4</span>
+                            {{form.desc}}
+                        </div>
+                    </div> {% endcomment %}
+                </div>
+                <div class="log-footer p-0" style="grid-template-columns: 1fr">
+                    <div class="log-footer-item log-footer-item-bordered">
+                        <button class="btn btn-primary btn-lg" style="width: 20%;"> Готово</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script>
+    let tooltip = document.querySelector('.tooltip');
+let closeButton = document.querySelector('.btn-close');
+let tooltipCheckboxs = document.querySelectorAll('.tooltip-checkbox');
+let tooltipText = document.querySelector('.tooltip-text');
+
+for (let tooltipCheckbox of tooltipCheckboxs) {
+    try
+    {
+    tooltipCheckbox.onclick = function () {
+    tooltipText.textContent = tooltipCheckbox.dataset.tooltipText;
+    console.log(tooltipText.textContent);
+    tooltip.classList.toggle('opened');
+    console.log(tooltip);
+  };
+  }
+  catch
+  {
+
+  }
+}
+console.log(tooltip);
+closeButton.onclick = function () {
+    try
+    {
+    tooltip.classList.remove('opened');
+    }
+    catch
+    {
+
+    }
+
+  };
+
+
+
+
+
+</script>
+
+
+<script>
+
+var LEHA = document.getElementById('LEHA');
+var cls_btn = document.getElementById('close-LEHA');
+var text = document.getElementById('LEHA-text');
+
+cls_btn.onclick = function ()
+{
+    LEHA.remove();
+    cls_btn.remove();
+    text.remove();
+};
+
+
+
+
+</script>
+
+
+<script src="{% static 'PersonalArea/js/show-LEHA.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/js/bootstrap.min.js"
+        integrity="sha512-UR25UO94eTnCVwjbXozyeVd6ZqpaAE9naiEUBK/A+QDbfSTQFhPGj5lOR6d8tsgbBk84Ggb5A3EkjsOgPRPcKA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="{% static 'PersonalArea/js/tooltip.js' %}"></script>
+<script src="{% static 'PersonalArea/js/hard-skills.js' %}"></script>
+</body>
+
+{% endblock content %}

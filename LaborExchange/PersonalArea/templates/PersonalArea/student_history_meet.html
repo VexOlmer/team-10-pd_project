@@ -1,0 +1,29 @@
+{% extends 'PersonalArea/base_student.html' %}
+{% load static %}
+
+{% block content_student %}
+
+        <div class="log-body">
+            <div class="student-info" style="overflow-y: auto;overflow-x: hidden;height: 600px; ">
+                <table style="width: 95%">
+                    <tbody>
+                        <tr style="height: 12%;">
+                            <th>Дата проведения</th>
+                            <th>Место проведения</th>
+                            <th>С кем</th>
+                            <th>Описание</th>
+                        </tr>
+                        {% for meet in meets %}
+                            <tr>
+                                <th> <input type="datetime-local" value="{{meet.time}}"> </th>
+                                <th> {{meet.place}} </th>
+                                <th> {{meet.who}} </th>
+                                <th> {{meet.desc}} </th>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+{% endblock %}

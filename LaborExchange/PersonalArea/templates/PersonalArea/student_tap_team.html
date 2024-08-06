@@ -1,0 +1,72 @@
+{% extends 'PersonalArea/base_student.html' %}
+{% load static %}
+
+{% block content_student %}
+{% if teams|length == 0 %}
+<h2 style=" font-size: 1.5em; text-align: center; margin-bottom: 0px;">На данный момент команды, доступные для
+    подачи заявки на вступление, отсутствуют</h2>
+{% endif %}
+{% if teams|length != 0 %}
+<div class="log-body log-body-leader-profile" style="padding: 0;">
+    <div class="filterAncContainer desktop" style="column-gap: 15px;">
+        <div class="filter-container" style="flex: 1; min-width:200px;">
+            <ul class="filter-container-ul">
+                <li class="title-ul">Команды, доступные для подачи заявки:</li>
+                {% for team in teams %}
+                <li>
+
+                    <button class="btn-show-anc"
+                            onclick="$(function(){$('#includemyHTML').load('{% url 'student_tap_team_leader' leader_id=team.leader_id %}')});">
+                        {% if team.themes != '' %}
+                        {{team.themes}}
+                        {% else %}
+                        Без темы {{team.number}}
+                        {% endif %}
+                    </button>
+
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="includemyHTML" style="margin-left: auto;">
+        </div>
+    </div>
+    <div class="filterAncContainer mobile" style="align-items: center;justify-content: center;">
+        <div class="filter-container mobile" style="width: 95%;">
+            <ul class="filter-container-ul-mobile" style="">
+                <li class="title-ul">Команды, доступные для подачи заявки:</li>
+                {% for team in teams %}
+                <li>
+                    <button class="btn-show-anc" data-toggle="modal"
+                            data-target="#myModal_{{team.number}}"
+                            onclick="$(function(){$('#includemyHTML1').load('{% url 'student_tap_team_leader' leader_id=team.leader_id %}')});">
+                        {% if team.themes != '' %}
+                        {{team.themes}}
+                        {% else %}
+                        Без темы {{team.number}}
+                        {% endif %}
+                    </button>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+{% for team in teams %}
+<div class="modal fade" id="myModal_{{team.number}}" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog modal-dialog-centered" id="modal-t-request1" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="includemyHTML1">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+{% endblock %}

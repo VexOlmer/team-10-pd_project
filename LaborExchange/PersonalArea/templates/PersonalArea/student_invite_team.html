@@ -1,0 +1,47 @@
+{% extends 'PersonalArea/base_student.html' %}
+{% load static %}
+
+{% block content_student %}
+
+<div class="log-body" style="padding: 0; padding-top: 25px; ">
+    <div class="filterAncContainer">
+        <div class="filter-container" style="flex: 0.5;">
+            <div style="display: grid;">
+                <ul class="filter-container-ul" style="width: 100%; overflow-y: auto;">
+                    <li class="title-ul">Члены команды</li>
+                    {% for student in team %}
+                    <li>
+                        <button class="btn-show-anc" onclick="$(function(){$('#includemyHTML').load('{% url 'student_profile_tap_team' student_id=student.id %}');
+        });">{{student.fio}}
+                        </button>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="log-footer" style="display: grid; grid-template-columns: 1fr; padding: 0; row-gap: 20px;">
+                    <form action="#" method="post" style="display: grid; row-gap: 20px;">
+                        {% csrf_token %}
+                        <button class="btn btn-primary" name='accept'
+                                style="width: 100%; max-width: 300px;">
+                            Вступить в команду
+                        </button>
+                        <button class="btn btn-primary" name='negative'
+                                style="width: 100%; max-width: 300px;">
+                            Отказаться
+                        </button>
+                    </form>
+                    <div>
+                        Ссылка на рабочее пространство - {{url_space}}
+                    </div>
+                    <div class="exit" style="display:flex; margin: 10px; justify-content: left">
+                        <img src="{% static 'PersonalArea/img/exit.png' %}" width="45" height="45" alt="Выход">
+                        <a href=""><span>Назад</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="includemyHTML" style="flex: 1; width: 100%;">
+        </div>
+    </div>
+</div>
+
+    {% endblock %}

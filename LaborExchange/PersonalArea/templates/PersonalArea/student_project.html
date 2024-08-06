@@ -1,0 +1,271 @@
+{% extends 'PersonalArea/base_student.html' %}
+{% load static %}
+
+{% block content_student %}
+
+<div class="modal fade" id="modal-calendar" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 90%;" id="modal-pr-calendar">
+        <div class="modal-content" style="padding: 20px;">
+            <div class="modal-body"
+                 style="display: grid; grid-template-columns: auto auto; border: 3.3965px dashed #000000; border-radius: 23.965px;">
+                {% csrf_token %}
+                <div class="log-body">
+                    <div class="meetings-info" style="overflow-y: auto;overflow-x: auto;max-height: 600px; ">
+                        {% if page_obj|length == 0 %}
+                        <h2 style=" font-size: 1.5em; text-align: center; margin-bottom: 0px;">На данный момент
+                            у Вашей команды не было ни одной встречи </h2>
+                        {% endif %}
+                        {% if page_obj|length != 0 %}
+                        <table style="width: 95%">
+                            <tbody>
+                            <tr style="height: 12%;">
+                                <th>Дата проведения</th>
+                                <th>Место проведения</th>
+                                <th>С кем</th>
+                                <th>Описание</th>
+                                <th>Статус</th>
+                            </tr>
+                            {% for meet in page_obj %}
+                            <tr>
+                                <th>{{meet.time}}</th>
+                                <th> {{meet.place}}</th>
+                                <th> {{meet.who}}</th>
+                                <td style="border-radius: 0 0 10px 0; width: 150px; background-color: #F3E6FE; border-left: 0;">
+                                    <div class="desc_calendar">
+                                        <span style="text-align: left;"> {{meet.desc}} </span>
+                                    </div>
+                                </td>
+                                <th> {{meet.status_text}}</th>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
+
+                    {% comment %} Отображение списка страниц для истории встреч {% endcomment %}
+                    {% if page_obj|length != 0 %}
+                    <nav class="list-pages">
+                        <ul>
+                            {% if page_obj.has_previous %}
+                                <li class="page-num">
+                                    <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+                                </li>
+                            {% endif %}
+                            {% for p in page_obj.paginator.page_range %}
+                                {% if page_obj.number == p %}
+                                    <li class="page-num page-num-selected">{{ p }}</li>
+                                {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                                    <li class="page-num">
+                                    <a href="?page={{ p }}">{{ p }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                                <li class="page-num">
+                                    <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+                </div>
+                <div class="modal-section">
+                    <div class="logo">
+                        <img class="logo-img" src="{% static 'PersonalArea/img/logo.svg' %}" alt="logo">
+                        <span class="logo-description">HELLO <br> TEAM! </span>
+                        <img class="triangle" src="{% static 'PersonalArea/img/triangle.png' %}" alt="triangle">
+                    </div>
+                    <input type="button" class="btn btn-secondary" data-dismiss="modal"
+                           value="Закрыть" name="close-btn"
+                           style="width: 100%; height: 50%; margin-left: auto; margin-right: auto;">
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if project_true %}
+<div class="log-body desktop" style="padding: 0;">
+    <div class="tables-container">
+        <div class="student-info">
+            <div class="anc-container-team" style="grid-template-columns: 1fr">
+                <table style="width: 100%; margin: 0;">
+                    <tbody>
+                    <tr>
+                        <td style="width: 50%; border-radius: 10px 0 0 0;border-bottom: 0;border-right: 0; background-color: #F3E6FE;">
+                            Тема проекта
+                        </td>
+                        <td style="border-radius: 0 10px 0 0;border-bottom: 0; background-color: #F3E6FE;">
+                            {{themes}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 0; background-color: #F3E6FE;">Описание
+                            темы
+                        </td>
+                        <td style="background-color: #F3E6FE;"> {{desc}}</td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 0; border-top: 0; background-color: #F3E6FE;">Заказчик
+                        </td>
+                        <td style="background-color: #F3E6FE;border-top: 0;"> {{customer_name}}</td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 0; border-top: 0; background-color: #F3E6FE;">Рабочее пространство
+                        </td>
+                        <td style="background-color: #F3E6FE;border-top: 0;"> {{url_space}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style=" border-top: 0; "><span
+                                data-toggle="modal"
+                                data-target="#modal-calendar" class="text-button">Посмотреть календарь встреч</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr;">
+            <div class="student-info" style="">
+                <table style="width: 100%; height: 100%; margin: 0;">
+                    <tbody>
+                    <tr>
+                        <td style="border-radius: 10px 0 0 0; background-color: #F3E6FE;width: 50%;">Куратор проекта
+                        </td>
+                        <td> {{curator_fio}}</td>
+                    </tr>
+                    <tr>
+                        <td style="border-radius: 10px 0 0 0; background-color: #F3E6FE;width: 50%;">Почта куратора</td>
+                        <td> {{curator_email}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%;">Дата встречи с куратором</td>
+                        <td style="width: 50%; padding: 15px;">{{time_curator}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%;">Площадка для встречи</td>
+                        <td style="width: 50%; padding: 15px;">
+                            <div class="duty-student">
+                                <span> {{place_curator}} </span>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="log-body mobile" style="padding: 0;">
+    <div class="tables-container">
+        <div class="student-info mobile">
+            <div class="anc-container-team" style="grid-template-columns: 1fr">
+                <table style="width: 100%; margin: 0;">
+                    <tbody>
+                    <tr>
+                        <th style="width: 50%; background-color: #F3E6FE;">
+                            Тема проекта
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 0; border-top: 0; background-color: #F3E6FE;">
+                            {% if themes|length != 0 %}
+                                {{themes}}
+                            {% else %}
+                                <span style="color: red;">Тема отсутствует</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="border-bottom: 0;">Описание
+                            темы
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="background-color: #F3E6FE;">
+                            {% if desc|length != 0 %}
+                                {{desc}}
+                            {% else %}
+                                <span style="color: red;">Описание отсутствует</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="border-top: 0; background-color: #F3E6FE;">Заказчик
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="background-color: #F3E6FE;border-top: 0;"> НАДО ДОБАВИТЬ РОЛЬ ЗАКАЗЧИКА</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="border-top: 0; background-color: #F3E6FE;"><span
+                                data-toggle="modal"
+                                data-target="#modal-calendar" class="text-button">Посмотреть календарь встреч</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr; row-gap: 10px; margin-top: 10px;">
+            <div class="student-info mobile" style="margin">
+                <table style="width: 100%; height: 100%; margin: 0;">
+                    <tbody>
+                    <tr>
+                        <th style="border-radius: 10px 0 0 0; background-color: #F3E6FE;width: 50%;">Куратор проекта
+                        </th>
+                    </tr>
+                    <tr>
+                        {% if curator_fio|length != 0 %}
+                            <td> {{curator_fio}}</td>
+                        {% endif %}
+                        {% if curator_fio|length == 0 %}
+                            <td><span style="color: red">Не назначен</span></td>
+                        {% endif %}
+
+                    </tr>
+                    <tr>
+                        <th style="width: 50%;">Почта куратора</th>
+                    </tr>
+                    <tr>
+                        {% if curator_fio|length != 0 %}
+                            <td> {{curator_email}}</td>
+                        {% endif %}
+                        {% if curator_fio|length == 0 %}
+                            <td><span style="color: red">Не назначен</span></td>
+                        {% endif %}
+
+                    </tr>
+                    <tr>
+                        <th style="width: 50%;">Дата встречи с куратором</th>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%; padding: 15px;">{{time_curator}}</td>
+                    </tr>
+                    <tr>
+                        <th style="width: 50%;">Площадка для встречи</th>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%; padding: 15px;">
+                            <div class="duty-student">
+                                <span> {{place_curator}} </span>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+    <h2 style=" font-size: 1.5em; text-align: center; margin-bottom: 0px;">На данный момент Вы не состоите в команде.
+        Воспользуйтесь вкладкой «Найти команду»
+        или подождите, когда лидер какой-либо команды пригласит Вас к себе</h2>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,158 @@
+{% extends 'PersonalArea/base_teacher.html' %}
+{% load static %}
+
+{% block content_teacher %}
+
+<div class="log-body-teacher-profile" style="padding: 0">
+
+
+    <div class="student-info">
+        <table style="width: 100%">
+            <tbody>
+            <tr>
+                <th>Имя-Фамилия</th>
+                <td> {{fio}}</td>
+            </tr>
+            <tr>
+                <th>Курируемые команды</th>
+                <td>
+
+                    <ul class="skills-table"
+                        style="text-align: left; list-style-image: none; list-style-type: disc; padding-left: 2rem;">
+                        {% for team in teams %}
+                        <li style="list-style-image: none; list-style-type: disc;">
+                            Лидер - {{team.leader}}, Тема - {{team.themes}}, Номер команды - {{team.number}}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>Почта</th>
+                <td> {{email}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="input__wrapper">
+            <button type="button" class="btn btn-secondary" data-toggle="modal"
+                    data-target="#profile_info">
+                Изменить настройки профиля
+            </button>
+        </div>
+    </div>
+    <div class="desktop" style="margin-top: auto; margin-bottom: auto;">
+        <div style="display: grid;">
+            <!--<img src="static/img/edit-btn.png" style="margin-left: auto;">-->
+            <div class="photo-container">
+                {% if photo %}
+                <div class="profile-ava" style=""><img src="{{photo.url}}" class="photo-profile"></div>
+                {% else %}
+                <div class="profile-ava" style=""><img src="{% static 'PersonalArea/img/photo.png' %}"
+                                                       class="photo-profile"></div>
+                {% endif %}
+            </div>
+            <!--<img src="static/img/edit-btn.png" class=""> -->
+            <div class="profile-load">
+                <form action="{% url 'teacher_profile' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="input-group mb-3" style="display: block; margin-top: 10px;">
+                        <div class="input__wrapper">
+                            <input type="file" name="image" id="input__file" class="input input__file"
+                                   accept="image/*" id="id_image">
+                            <label for="input__file" class="input__file-button">
+                                    <span class="input__file-icon-wrapper"><img class="input__file-icon"
+                                                                                src="{% static 'PersonalArea/img/add.svg' %}"
+                                                                                alt="Выбрать файл"
+                                                                                width="25"></span>
+                                <span class="input__file-button-text">Загрузите фото профиля</span>
+                                {% comment %} {{ form.image }} {% endcomment %}
+                            </label>
+                        </div>
+                        <div class="input__wrapper">
+                            <input type="submit" id="SubmitPhoto" class="input input__file">
+                            <label for="SubmitPhoto" class="input__file-button" style="justify-content: center;">
+                                <span class="input__file-button-text">Сохранить</span>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="student-info mobile">
+        <table style="width: 100%">
+            <tbody>
+            <tr>
+                <th>Имя-Фамилия</th>
+            </tr>
+            <tr>
+                <td>{{fio}}</td>
+            </tr>
+            <tr>
+                <th>Курируемые команды</th>
+            </tr>
+            <tr>
+                <td>
+                    {% if teams|length == 0 %}
+                    <span>–</span>
+                    {% else %}
+                    <ul class="skills-table"
+                        style="text-align: left; list-style-image: none; list-style-type: disc; padding-left: 2rem;">
+                        {% for team in teams %}
+                        <li style="list-style-image: none; list-style-type: disc;">
+                            Лидер - {{team.leader}}, Тема - {{team.themes}}, Номер команды - {{team.number}}
+                        </li>
+                        {% endfor %}
+                        {% endif %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>Почта</th>
+            </tr>
+            <tr>
+                <td> {{email}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="input__wrapper">
+            <button type="button" class="btn btn-secondary" data-toggle="modal"
+                    data-target="#profile_info">
+                Изменить настройки профиля
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="profile_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true"
+     data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-dashed">
+                <div class="modal-body modal-change-info">
+                    <div style="display: grid;">
+                        <form action="#" autocomplete=off name="platform" method="post" id="setting_teacher" class="change-info-form">
+                            {% csrf_token %}
+        
+        
+                                    <input type="text" name="email" class="search" placeholder="Почта">
+                                    <input type="submit" name="save_setting" class="submit" value="Сохранить">
+        
+                                    <input type="text" name="fio" class="search" placeholder="Фамилия-Имя">
+                                    <input type="submit" name="save_setting" class="submit" value="Сохранить">
+        
+                                    <div class="modal-footer-close-btn modal-f-auth-1" style="grid-template-columns: 1fr;">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="">Закрыть
+                                        </button>
+                                    </div>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content_teacher %}

@@ -1,0 +1,169 @@
+{% extends 'PersonalArea/base_leader.html' %}
+{% load static %}
+
+{% block content_leader %}
+
+
+<form action="{% url 'leader_team' %}" autocomplete=off name="platform" method="post"
+      id="form-save">
+    {% csrf_token %}
+    <div class="log-body log-body-leader-profile" style="padding: 30px; grid-template-columns: 1fr;">
+        <div class="student-info desktop">
+            <div class="anc-container-team" style="grid-template-columns: 1fr">
+                <table style="width: 100%; margin: 0;">
+                    <tbody>
+                    <tr style="height: 12%;">
+                        <th style="border-radius: 10px 0 0 0;border-bottom: 0;  width: 150px; background-color: #F3E6FE;">
+                            Студент
+                        </th>
+                        <th style="border-bottom: 0; border-left: 0;background-color: #F3E6FE;">Компетенции</th>
+                    </tr>
+                    {% for student in team %}
+                    <tr style="width: 50%; height: 200px;">
+                        <td style="width: 150px; background-color: #F3E6FE;"> {{student.fio}}</td>
+                        <td style="border-left: 0; width: 150px; background-color: #F3E6FE;">
+                            <ul class="skills-table"
+                                style="text-align: left; list-style-image: none; list-style-type: disc; padding-left: 2rem;">
+                                
+                                {% for elem in student.skills.all_skills %}
+                                    <li style="list-style-image: none; list-style-type: disc;">{{elem}}</li>
+                                {% endfor %}
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="student-info mobile">
+            <div class="anc-container-team" style="grid-template-columns: 1fr">
+                <table style="width: 100%; margin: 0;">
+                    <tbody>
+                    {% for student in team %}
+                    <tr>
+                        <th style="border-radius: 10px 10px 0 0; width: 150px; background-color: #F3E6FE;">
+                            Студент
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="border-top: 0; border-bottom: 0;">{{student.fio}}</td>
+                    </tr>
+                    <tr>
+                        <th style="border-bottom: 0; background-color: #F3E6FE;">Компетенции</th>
+                    </tr>
+                    <tr>
+                        <td style="background-color: #F3E6FE;">
+                            <ul class="skills-table"
+                                style="text-align: left; list-style-image: none; list-style-type: disc; padding-left: 2rem;">
+                                
+                                {% for elem in student.skills.all_skills %}
+                                    <li style="list-style-image: none; list-style-type: disc;">{{elem}}</li>
+                                {% endfor %}
+
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+
+let buttons = document.querySelectorAll('.edit-task-btn');
+for (let btn of buttons)
+{
+    console.log(buttons)
+    btn.onclick = function()
+    {
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+<script>
+    var textArea = document.querySelectorAll("textarea");
+let save_btn = document.querySelectorAll('[name="save-btn"]');
+let symbols = document.querySelectorAll('.show-symbol-length');
+
+for (let i = 0; i < textArea.length; i++)
+{
+
+textArea[i].value = '';
+textArea[i].oninput = function () {
+ symbols[i].textContent = textArea[i].value.length + "/140";
+ if (textArea[i].value.length >= 140)
+    {
+
+            save_btn[i].disabled = true;
+            symbols[i].style.color = "red";
+    }
+    else
+    {
+        save_btn[i].disabled = false;
+        symbols[i].style.color = "black";
+    }
+}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/js/bootstrap.min.js"
+        integrity="sha512-UR25UO94eTnCVwjbXozyeVd6ZqpaAE9naiEUBK/A+QDbfSTQFhPGj5lOR6d8tsgbBk84Ggb5A3EkjsOgPRPcKA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+{% endblock content_leader%}

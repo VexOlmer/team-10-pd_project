@@ -1,0 +1,41 @@
+{% load static %}
+
+{% block content_student %}
+        <div class="filterAncContainer">
+            <div class="filter-container" style="flex: 0.4">
+                <div style="display: grid;">
+                <ul class="filter-container-ul" style="width: 100%; overflow-y: auto;">
+                    <li class="title-ul">Члены команды</li>
+                    {% for student in team %}
+                    <li>
+                        <button class="btn-show-anc show-student" onclick="$(function(){$('#includemyHTML2').load('{% url 'student_profile_tap_team' student_id=student.id %}');
+                    });">{{student.fio}}
+                        </button>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <form action="{% url 'student_tap_team' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="request_team" value='{{id_leader}}' class="btn btn-primary btn-lg  "
+                            style="max-width: 300px;">Отправить запрос о
+                        вступлении
+                    </button>
+                </form>
+                    <div style="max-width: 300px;">
+                        Ссылка на рабочее пространство - {{url_space}}
+                    </div>
+                </div>
+            </div>
+            <div id="includemyHTML2" style="flex: 1; width: 100%;">
+            </div>
+        </div>
+<script>
+    let a = undefined;
+    a = document.querySelectorAll('.show-student');
+    a[0].click();
+    let b = document.querySelectorAll('.photo-del');
+    b[0].remove();
+</script>
+
+
+{% endblock content_student %}

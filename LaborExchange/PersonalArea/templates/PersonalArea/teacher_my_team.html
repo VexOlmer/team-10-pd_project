@@ -1,0 +1,455 @@
+{% extends 'PersonalArea/base_teacher.html' %}
+{% load static %}
+
+{% block content_teacher %}
+
+<body>
+
+{% for team in teams %}
+
+<form action="{% url 'teacher_team' %}" autocomplete=off name="platform" method="post"
+      id="form-setting_{{team.leader_id}}">
+    {% csrf_token %}
+    <div class="modal fade" id="SettingsTeam_{{team.leader_id}}" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="min-width: 300px; max-width: 900px;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="modal-dashed" style="padding-top: 5px;">
+                        <h5 class="modal-title" style="margin: 5px;">Настройки
+                            команды</h5>
+                        <label for="msg1" style="" class="textarea-message">Можно удалить одного
+                            человека
+                            или же распустить всю команду под руководском
+                            <span style="font-weight: 500">{{team.leader}}</span> целиком.
+                        </label>
+                        <div class="student-info mobile" style="margin: 0;">
+                            <table style="width: 100%; margin: 0; margin-top: 20px; font-size: 0.8em">
+                                <tbody>
+                                <tr>
+                                    <th>Студент</th>
+                                    <th>Удалить</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        {{team.leader}}
+
+                                        {% for fio_teammate in team.teammates_fio %}
+                                        {% if fio_teammate != "Напарников нет" %}
+                                        <ul>
+                                            <li style="list-style-image: none; list-style-type: none; font-size: 1em;">
+                                                {{fio_teammate}}
+                                            </li>
+                                        </ul>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </td>
+
+                                    <td>
+                                        {% for id_teammate in team.teammates_id %}
+                                        {% if id_teammate != 0%}
+                                        <button type="submit" form="form-setting" class="btn btn-secondary"
+                                                name="del_student_for_team"
+                                                style="margin-left: auto; margin-right: auto; width:100%"
+                                                value="{{id_teammate}}">Удалить из команды
+                                        </button>
+                                        {% else %}
+                                        –
+                                        {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="student-info" style="margin: 0;">
+                            <table style="width: 100%; margin: 0; margin-top: 20px;">
+                                <tbody>
+                                <tr>
+                                    <th>Студент</th>
+                                    <th>Удалить</th>
+                                </tr>
+                                <tr>
+
+                                    <td>
+                                        {{team.leader}}
+
+                                        {% for fio_teammate in team.teammates_fio %}
+                                        {% if fio_teammate != "Напарников нет" %}
+                                        <ul>
+                                            <li style="list-style-image: none; list-style-type: none; font-size: 1em;">
+                                                {{fio_teammate}}
+                                            </li>
+                                        </ul>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </td>
+
+                                    <td>
+                                        {% for id_teammate in team.teammates_id %}
+                                        {% if id_teammate != 0%}
+                                        <div style="display: grid; justify-content: center;">
+                                            <button type="submit" form="form-setting_{{team.leader_id}}"
+                                                    class="btn btn-secondary"
+                                                    name="del_student_for_team"
+                                                    style="margin-left: auto; margin-right: auto; width:90%; padding: 5px; margin: 10px;"
+                                                    value="{{id_teammate}}">Удалить из команды
+                                            </button>
+                                        </div>
+                                        {% else %}
+                                        –
+                                        {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="settings-container" style="margin-top: 28px;">
+                            <p style="text-align: justify; font-size: 1.2em;">По умолчанию в команде может находиться 5
+                                человек, но при необходимости Вы можете изменить допустимое количество человек в команде
+                                Обратите внимание, что если Вы хотите уменьшить размер команды, то перед этим нужно
+                                исключить нужное количество человек из неё
+                                Сейчас максимально допустимое число участников команды
+                                <span>{{team.max_amount}}</span></p>
+                            <div style="display: grid; row-gap: 10px;">
+                                <input type="text" form="form-setting_{{team.leader_id}}" name="max_numbers"
+                                       class="search"
+                                       placeholder="Максимальное число людей в команде">
+                                <button type="submit" form="form-setting_{{team.leader_id}}" class=""
+                                        name="max_numbers_btn"
+                                        style=""
+                                        value="{{team.leader_id}}">Изменить число людей
+                                </button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="modal-footer-close-btn"
+                                 style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px;">
+                                <button type="submit" form="form-setting_{{team.leader_id}}" class="btn btn-secondary"
+                                        name="del_team"
+                                        style="background-color: #850B00; margin-left: auto; margin-right: auto; width:100%"
+                                        value="{{team.leader_id}}">Распустить команду
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-close-modal"
+                                        data-dismiss="modal"
+                                        aria-label="Close" style="width:100%;">
+                                    Закрыть
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<form action="{% url 'teacher_team' %}" autocomplete=off name="platform" method="post"
+      id="form-themes_{{team.leader_id}}">
+    {% csrf_token %}
+    <div class="modal fade" id="myThemes_{{team.leader_id}}" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="min-width: 300px; max-width: 900px;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="modal-dashed" style="padding-top: 5px;">
+                        <h5 class="modal-title" id="exampleModalLabel1" style="margin: 5px;">Назначение
+                            темы для команды</h5>
+                        <label for="msg1" style="" class="textarea-message">Назначьте команде под
+                            руководством
+                            <span style="font-weight: 500">{{team.leader}}</span> новую тему для
+                            проекта.
+                            После назначения темы Вы автоматически прикрепляетесь к этой команде в
+                            качестве куратора</label>
+                        <textarea id="msg1" name="themes"
+                                  style="width: 100%; resize: none;" maxlength="140"></textarea>
+                        <label for="message1" class="textarea-message">Введите краткое описание темы для
+                            этой команды</label>
+                        <textarea maxlength="140" id="message1" name="description_themes"
+                                  style="width: 100%; resize: none;"></textarea>
+                        <label for="customer" class="textarea-message">Запишите заказчика, закрепленного за этой
+                            темой</label>
+                        <input maxlength="140" id="customer" name="customer"
+                               style="width: 100%; resize: none;">
+                        <div class="modal-footer">
+                            <div class="modal-footer-close-btn"
+                                 style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px;">
+                                <button type="submit" class="btn btn-secondary" value="{{team.leader_id}}"
+                                        form="form-themes_{{team.leader_id}}"
+                                        style="margin-left: auto; margin-right: auto; width:100%"
+                                        name="save-themes">
+                                    Сохранить
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-close-modal"
+                                        data-dismiss="modal"
+                                        aria-label="Close" style="width:100%;">
+                                    Закрыть
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endfor %}
+
+{% if teams|length != 0 %}
+<div class="log-body-leader-profile">
+    <div class="student-info mobile">
+        <table style="width: 100%;">
+            <tbody>
+            <tr>
+                <th>Лидеры команд</th>
+            </tr>
+            {% for team in teams %}
+
+            <tr>
+                <td class="dropdown">
+                    <div onclick="myFunction()" class="dropbtn"><span class="" style="display: inline-block;"
+                    >{{team.leader}}</span>
+                        <img class="" src="/static/PersonalArea/img/open-arrow.svg"></div>
+                    <div class="dropdown-content myDropdown">
+                        <table class="dropdown-table">
+                            <tbody>
+                            <tr>
+                                <th>Группа лидера</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {% for teammate in team.teammates_fio %}
+                                    {% if teammate == "Напарников нет" %}
+                                    <ul>
+                                        <li style="list-style-image: none; list-style-type: none; font-size: 1em; color: red;">
+                                            {{teammate}}
+                                        </li>
+                                    </ul>
+                                    {% else %}
+                                    <ul>
+                                        <li style="list-style-image: none; list-style-type: none; font-size: 1em;">
+                                            {{teammate}}
+                                        </li>
+                                    </ul>
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Текущая тема</th>
+                            </tr>
+                            <tr>
+                                {% if team.themes != '' %}
+                                <td>{{team.themes}}</td>
+                                {% else %}
+                                <td style="color: red;">Тема не назначена</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <th>Текущее описание темы</th>
+                            </tr>
+                            <tr>
+                                {% if team.desc != '' %}
+                                <td>{{team.desc}}</td>
+                                {% else %}
+                                <td style="color: red;">Тема не назначена</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <th>Настройки темы</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button type="button" class="edit-btn" data-toggle="modal"
+                                            data-target="#myThemes_{{team.leader_id}}"
+                                            style="margin-left: auto; padding: 0;">
+                                        <img src="{% static 'PersonalArea/img/edit-btn.png' %}">
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Настройки команды</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button type="button" class="edit-btn" data-toggle="modal"
+                                            data-target="#SettingsTeam_{{team.leader_id}}"
+                                            style="margin-left: auto; padding: 0;">
+                                        <img src="{% static 'PersonalArea/img/edit-btn.png' %}">
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="student-info desktop">
+        <table style="width: 100%;">
+            <tbody>
+            <th>Лидеры команд</th>
+            <th>Группа лидера</th>
+            <th>Текущая тема</th>
+            <th>Текущее описание темы</th>
+            <th>Настройки темы</th>
+            <!--<th>Описание темы</th>-->
+            <th>Настройки команды</th>
+            {% for team in teams %}
+            <tr>
+                <td> {{team.leader}}</td>
+                <td>
+                    {% for teammate in team.teammates_fio %}
+                    {% if teammate == "Напарников нет" %}
+                    <ul>
+                        <li style="list-style-image: none; list-style-type: none; font-size: 1em; color: red;">
+                            {{teammate}}
+                        </li>
+                    </ul>
+                    {% else %}
+                    <ul>
+                        <li style="list-style-image: none; list-style-type: none; font-size: 1em;">{{teammate}}
+                        </li>
+                    </ul>
+                    {% endif %}
+                    {% endfor %}
+
+                </td>
+                {% if team.themes != '' %}
+                <td>{{team.themes}}</td>
+                {% else %}
+                <td style="color: red;">Тема не назначена</td>
+                {% endif %}
+                <td>
+                    {{team.desc}}
+                </td>
+                <td style="padding: 10px;">
+                    <button type="button" class="edit-btn" data-toggle="modal"
+                            data-target="#myThemes_{{team.leader_id}}" style="margin-left: auto; padding: 0;">
+                        <img src="{% static 'PersonalArea/img/edit-btn.png' %}">
+                    </button>
+                </td>
+
+                <td style="padding: 10px;">
+                    <button type="button" class="edit-btn" data-toggle="modal"
+                            data-target="#SettingsTeam_{{team.leader_id}}"
+                            style="margin-left: auto; padding: 0;">
+                        <img src="{% static 'PersonalArea/img/edit-btn.png' %}">
+                    </button>
+                </td>
+            </tr>
+
+
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<h2 style=" font-size: 1.5em; text-align: center; margin-bottom: 0px;">На данный момент ни одной команды не
+    существует</h2>
+{% endif %}
+
+</body>
+
+<script>
+function myFunction() {
+  drp = document.querySelectorAll(".myDropdown")
+  drbtn = document.querySelectorAll(".dropbtn")
+  for (let i = 0; i < drp.length; i++)
+  {
+  drbtn[i].onclick = function()
+  {
+
+    drp[i].classList.toggle("show");
+    };
+  }
+}
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+<script>
+
+var textArea = document.getElementById('msg1');
+let save_btn = document.querySelectorAll('[name="save-btn"]');
+let symbols = document.querySelectorAll('.show-symbol-length');
+
+textArea.value = '';
+textArea.oninput = function () {
+symbols[0].textContent = textArea.value.length + "/140";
+if (textArea.value.length >= 140)
+    {
+            save_btn[0].disabled = true;
+            symbols[0].style.color = "red";
+    }
+    else
+    {
+        save_btn[0].disabled = false;
+        symbols[0].style.color = "red";
+        symbols[0].style.color = "black";
+
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+{% endblock content_teacher%}

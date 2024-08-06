@@ -1,0 +1,70 @@
+{% extends 'PersonalArea/base_student.html' %}
+{% load static %}
+
+{% block content_student %}
+
+<div class="log-body">
+    {% if teams|length == 0 %}
+    <h2 style=" font-size: 1.5em; text-align: center; margin-bottom: 0px;">На данный момент Вы не состоите в команде.
+        Воспользуйтесь вкладкой «Найти команду»
+        или подождите, когда лидер какой-либо команды пригласит Вас к себе</h2>
+    {% endif %}
+    {% if teams|length > 0 %}
+    <div class="student-info">
+        <table style="width: 100%">
+            <tbody>
+            <tr style="height: 12%;">
+                <th>Студент</th>
+                <th>Компетенции</th>
+            </tr>
+            {% for team in teams %}
+            <tr>
+                <th> {{team.fio}}</th>
+                <td>
+                    <ul class="skills-table"
+                        style="text-align: left; list-style-image: none; list-style-type: disc; padding-left: 2rem;">
+                        {% for elem in team.skills.all_skills %}
+                            <li style="list-style-image: none; list-style-type: disc;">{{elem}}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="student-info mobile">
+    <table style="width: 100%">
+        <tbody>
+        {% for team in teams %}
+        <tr>
+        <tr style="height: 12%;">
+            <th>Студент</th>
+        </tr>
+        <tr>
+            <td> {{team.fio}}</td>
+        </tr>
+        <tr>
+            <th>Компетенции</th>
+        </tr>
+        <tr>
+            <td> {{team.fio}}</td>
+        </tr>
+        <tr>
+            <td>
+                <ul class="skills-table"
+                    style="text-align: left; list-style-image: none; list-style-type: disc; padding-left: 2rem;">
+                    {% for elem in team.skills.all_skills %}
+                        <li style="list-style-image: none; list-style-type: disc;">{{elem}}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% endblock content_student %}

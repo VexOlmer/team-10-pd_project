@@ -1,0 +1,106 @@
+{% extends 'PersonalArea/base_leader.html' %}
+{% load static %}
+
+{% block content_leader %}
+
+    <form action="#" autocomplete=off name="platform" method="post"
+          id="form-save">
+          {% csrf_token %}
+        <div class="log-body">
+            <div class="student-info" style="overflow-y: auto;overflow-x: hidden;max-height: 600px; ">
+                <table style="width: 95%">
+                    <tbody>
+                    <tr style="height: 12%;">
+                        <th>Дата проведения</th>
+                        <th>Место проведения</th>
+                        <th>С кем</th>
+                        <th>Описание</th>
+                    </tr>
+                    {% for meet in meets %}
+                    <tr>
+                        <th> <input type="datetime-local" value="{{meet.time}}"> </th>
+                        <th> {{meet.place}} </th>
+                        <th> {{meet.who}} </th>
+                        <td style="border-radius: 0 0 10px 0; width: 150px; background-color: #F3E6FE; border-left: 0;">
+                            <div class="desc_calendar">
+                                <span style="text-align: left;"> {{meet.desc}} </span>
+                                <button type="button" class="edit-btn" data-toggle="modal"
+                                        data-target="#myModal_{{meet.id}}"
+                                        style="margin-left: auto; padding: 0;">
+                                    <img src="{% static 'PersonalArea/img/edit-btn.png' %}">
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <div class="modal fade" id="myModal_{{meet.id}}" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Описание встречи</h5>
+                                    <button type="button" class="btn-close" data-dismiss="modal"
+                                            aria-label="Close">
+                                        <span aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <label for="message">Описание:</label>
+                                    <textarea id="message" name="desc_message_{{meet.id}}"
+                                              style="width: 100%; resize: none;"></textarea>
+                                    <span class="show-symbol-length">0\140</span>
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="submit" class="btn btn-secondary" value="Сохранить"
+                                           form="form-save" name="save-btn"
+                                           style="width: 30%; margin-left: auto; margin-right: auto;">
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+            <input type="submit" class="btn btn-secondary btn-save" value="Сохранить" form="form-save"
+                   style="width: 20%; margin-left: auto; margin-right: auto; margin-top: 25px;">
+        </div>
+    </form>
+
+<script>
+    var textArea = document.querySelectorAll("textarea");
+let save_btn = document.querySelectorAll('[name="save-btn"]');
+let symbols = document.querySelectorAll('.show-symbol-length');
+
+for (let i = 0; i < textArea.length; i++)
+{
+
+textArea[i].value = '';
+textArea[i].oninput = function () {
+ symbols[i].textContent = textArea[i].value.length + "/140";
+ if (textArea[i].value.length >= 140)
+    {
+
+            save_btn[i].disabled = true;
+            symbols[i].style.color = "red";
+    }
+    else
+    {
+        save_btn[i].disabled = false;
+        symbols[i].style.color = "black";
+    }
+}
+};
+
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/js/bootstrap.min.js"
+        integrity="sha512-UR25UO94eTnCVwjbXozyeVd6ZqpaAE9naiEUBK/A+QDbfSTQFhPGj5lOR6d8tsgbBk84Ggb5A3EkjsOgPRPcKA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+{% endblock %}

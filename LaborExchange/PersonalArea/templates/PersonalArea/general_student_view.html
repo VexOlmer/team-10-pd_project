@@ -1,0 +1,267 @@
+{% load static %}
+
+
+<section class="main desktop">
+    <div class="student-info-anc" style="margin-right: 20%;">
+        <div class="anc-container" style="grid-template-columns: auto auto; column-gap: 1em;">
+            <table>
+                <tbody>
+                <tr>
+                    <th style="border-radius: 10px 0 0 0;border-bottom: 0;border-right: 0; width: 150px;   background-color: #F3E6FE;">
+                        ФИО
+                    </th>
+                    <td style="border-radius: 0 10px 0 0;border-bottom: 0;    background-color: #F3E6FE;">{{fio}}</td>
+                </tr>
+                <tr>
+                    <th style="border-bottom: 0;border-right: 0;    background-color: #F3E6FE;">Группа</th>
+                    <td style="border-bottom: 0;    background-color: #F3E6FE;">{{group}}</td>
+                </tr>
+                <tr style="height: 350px;">
+                    <th style="border-right: 0; padding: 15px;  background-color: #F3E6FE;"><span
+                            class="text-rotate">Компетенции</span></th>
+                    <td style="background-color: #F3E6FE;">
+                        <ul class="skills-table"
+                            style="text-align: left; list-style-image: none; list-style-type: disc; padding-left: 2rem; font-size: 16px;">
+                            
+                            {% for elem in skills.all_skills %}
+                                <li style="list-style-image: none; list-style-type: disc; font-size: 22px;">{{elem}}</li>
+                            {% endfor %}
+
+                        </ul>
+                    </td>
+                </tr>
+                <tr style="background-color: #F3E6FE;">
+                    <th style="border-radius: 0 0 0 10px; border-top:0;border-right:0; padding: 5px;">Предполагаемая роль</th>
+                    <td style="border-radius: 0 0 10px 0; border-top:0;"> {{skills.role}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="photo-del">
+                <div class="photo-container">
+                    {% if photo %}
+                    <div class="profile-ava" style=""><img src="{{photo.url}}" class="photo-check-profile"></div>
+                    {% else %}
+                    <div class="profile-ava" style=""><img src="{% static 'PersonalArea/img/photo.png' %}"
+                                                           class="photo-check-profile"></div>
+                    {% endif %}
+                </div>
+                <div style="margin-top: auto; margin-bottom: auto;">
+                    <div style="display: grid;">
+                        <div style="display: grid; width: 100%">
+
+                            <form action="{% url url_view student_id=id %}" method="post">
+
+                                {% csrf_token %}
+                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog reg-modal" role="document">
+                                        <div class="modal-content" style="padding-left: 0; padding-right: 0;">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Объясните причину
+                                                    отказа</h5>
+                                                <button type="button" class="btn-close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true"></span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body" style="padding-bottom: 0">
+                                                <div class="anc-description"
+                                                     style="margin-top: 25px; display:grid; grid-template-columns: 1fr; row-gap: 20px; padding: 0;">
+                                <span class="step-text"
+                                      style="position: relative;text-decoration: none; font-size:1em;">Вы собираетесь отклонить заявку студента.
+                                Объясните причину своего отказа</span>
+                                                    <ul>
+                                                        <li class="refusal-reason"><input type="radio"
+                                                                                          value="Набрано необходимое количество людей с этой компетенцией"
+                                                                                          name="refusal_reason"
+                                                                                          id="reason1"
+                                                                                          onclick="clickRadio(this)"><label
+                                                                for="reason1" class="refusal-text">Причина1</label></li>
+                                                        <li class="refusal-reason"><input type="radio"
+                                                                                          value="У данного студента неподходящие компетенции"
+                                                                                          name="refusal_reason"
+                                                                                          id="reason2"
+                                                                                          onclick="clickRadio(this)"><label
+                                                                for="reason2" class="refusal-text">Неподходящие компетенции</label></li>
+                                                        <li class="refusal-reason"><input type="radio" value="Причина3"
+                                                                                          name="refusal_reason"
+                                                                                          id="reason3"
+                                                                                          onclick="clickRadio(this)"><label
+                                                                for="reason3" class="refusal-text">Причина3</label></li>
+                                                        <li class="refusal-reason"><input type="radio" value="Причина4"
+                                                                                          name="refusal_reason"
+                                                                                          id="reason4"
+                                                                                          onclick="clickRadio(this)"><label
+                                                                for="reason4" class="refusal-text">Причина4</label></li>
+                                                    </ul>
+                                                    <textarea name="refusal_reason" class="load-about" maxlength="140"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer-close-btn" style="padding: 16px; padding-top: 0">
+                                                <button class="btn btn-primary" name='negative'
+                                                        style="margin: 10px; width: 50%; font-size: 1.3em; margin-left: auto; margin-right: auto;">
+                                                    Готово
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% if accept_button %}
+
+                                <button class="btn btn-primary" name='accept'
+                                        style="margin-top: 70px; margin-bottom: 10px; width: 100%; font-size: 1.3em;">
+                                    {{accept_button_text}}
+                                </button>
+                                {% endif %}
+                            </form>
+                            {% if negative_button %}
+                            <button class="btn btn-primary btn-lg" data-target="#myModal" data-toggle="modal"
+                                    style="font-size: 1.3em;">
+                                {{negative_button_text}}
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<section class="main mobile">
+    <div class="student-info-anc mobile">
+        <div class="anc-container" style="grid-template-columns: auto;">
+            <table>
+                <tbody>
+                <tr>
+                    <th style="font-size: 1em;border-radius: 10px 10px 0 0;background-color: #F3E6FE;">
+                        Имя-Фамилия
+                    </th>
+                <tr>
+                    <td style="font-size: 0.7em;background-color: #F3E6FE;">{{fio}}</td>
+                </tr>
+                <tr>
+                    <th style="font-size: 0.7em;background-color: #F3E6FE;">Группа</th>
+                </tr>
+                <tr>
+                    <td style="font-size: 0.7em;background-color: #F3E6FE;">{{group}}</td>
+                </tr>
+                <tr>
+                    <th style="padding: 5px; font-size: 0.7em;  background-color: #F3E6FE;"><span
+                            class="text-rotate">Компетенции</span></th>
+                </tr>
+                <tr>
+                    <td style="background-color: #F3E6FE;">
+                        <ul class="skills-table"
+                            style="text-align: left; list-style-image: none; list-style-type: disc; padding-left: 2rem; font-size: 0.7em;">
+                            
+                            {% for elem in skills.all_skills %}
+                                <li style="list-style-image: none; list-style-type: disc; font-size: 1em">{{elem}}</li>
+                            {% endfor %}
+
+                        </ul>
+                    </td>
+                </tr>
+                <tr style="border-radius: 0 0 10px 10px; background-color: #F3E6FE;">
+                    <th>Предполагаемая роль</th>
+                    <td> {{skills.role}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+
+                <div style="margin-top: auto; margin-bottom: auto;">
+                    <div style="display: grid;">
+                        <div style="display: grid; width: 100%">
+
+                            <form action="{% url url_view student_id=id %}" method="post">
+
+                                {% csrf_token %}
+                                <div class="modal fade" id="myModal1" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered reg-modal" role="document">
+                                        <div class="modal-content" style="padding-left: 0; padding-right: 0;">
+                                            <div class="modal-header" style="padding-bottom: 0;">
+                                                <h5 class="modal-title" id="exampleModalLabel1">Объясните причину
+                                                    отказа</h5>
+                                                <button type="button" class="btn-close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true"></span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body" style="padding-bottom: 0; padding-top: 0;">
+                                                <div class="anc-description"
+                                                     style="margin-top: 25px; display:grid; grid-template-columns: 1fr; row-gap: 20px; padding: 0;">
+                                <span class="step-text"
+                                      style="position: relative;text-decoration: none; font-size:0.8em;">Вы собираетесь отклонить заявку студента.
+                                Объясните причину своего отказа, выбрав из предложенных или написав свою</span>
+                                                    <ul>
+                                                        <li class="refusal-reason"><input type="radio"
+                                                                                          value="Набрано необходимое количество людей с этой компетенцией"
+                                                                                          name="refusal_reason"
+                                                                                          id="reason-m-1"
+                                                                                          onclick="clickRadio(this)"><label
+                                                                for="reason1" class="refusal-text"
+                                                                style="font-size:0.8em;">Причина1</label></li>
+                                                        <li class="refusal-reason"><input type="radio"
+                                                                                          value="Неподходящие компетенции"
+                                                                                          name="refusal_reason"
+                                                                                          id="reason-m-2"
+                                                                                          onclick="clickRadio(this)"><label
+                                                                for="reason2" class="refusal-text"
+                                                                style="font-size:0.8em;">Неподходящие компетенции</label></li>
+                                                        <li class="refusal-reason"><input type="radio" value="Причина3"
+                                                                                          name="refusal_reason"
+                                                                                          id="reason-m-3"
+                                                                                          onclick="clickRadio(this)"><label
+                                                                for="reason3" class="refusal-text"
+                                                                style="font-size:0.8em;">Причина3</label></li>
+                                                        <li class="refusal-reason"><input type="radio" value="Причина4"
+                                                                                          name="refusal_reason"
+                                                                                          id="reason-m-4"
+                                                                                          onclick="clickRadio(this)"><label
+                                                                for="reason4" class="refusal-text"
+                                                                style="font-size:0.8em;">Причина4</label></li>
+                                                    </ul>
+                                                    <textarea name="refusal_reason" class="load-about"
+                                                              style="height: 100px;" maxlength="140"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer-close-btn" style="padding: 16px; padding-top: 0">
+                                                <button class="btn btn-primary" name='btn_negative'
+                                                        style="margin: 10px; width: 50%; font-size: 1.3em; margin-left: auto; margin-right: auto;">
+                                                    Готово
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% if accept_button %}
+
+                                <button class="btn btn-primary" name='accept'
+                                        style="margin-top: 20px; margin-bottom: 10px; width: 100%; font-size: 1em;">
+                                    {{accept_button_text}}
+                                </button>
+                                {% endif %}
+                            </form>
+                            {% if negative_button %}
+                            <button class="btn btn-primary btn-lg next-modal" data-target="#myModal1"
+                                    data-toggle="modal"
+                                    style="font-size: 1em;margin-bottom: 10px;">
+                                {{negative_button_text}}
+                            </button>
+                            {% endif %}
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" style="font-size: 1em">
+                                Закрыть
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="{% static 'PersonalArea/js/click_radio_off.js' %}"></script>

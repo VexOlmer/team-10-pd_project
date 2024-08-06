@@ -1,0 +1,81 @@
+<section class="main">
+    <div class="student-info-anc" style="margin-right: 20%;">
+        <div class="anc-container" style="grid-template-columns: auto auto; column-gap: 1em;">
+            <table>
+                <tbody>
+                <tr>
+                    <th style="border-radius: 10px 0 0 0;border-bottom: 0;border-right: 0; width: 150px;   background-color: #F3E6FE;">
+                        ФИО
+                    </th>
+                    <td style="border-radius: 0 10px 0 0;border-bottom: 0;    background-color: #F3E6FE;">{{fio}}</td>
+                </tr>
+                <tr>
+                    <th style="border-bottom: 0;border-right: 0;    background-color: #F3E6FE;">Группа</th>
+                    <td style="border-bottom: 0;    background-color: #F3E6FE;">{{group}}</td>
+                </tr>
+                <tr style="height: 350px;">
+                    <th style="border-radius: 0 0 0 10px; border-right: 0; padding: 15px;   background-color: #F3E6FE;"><span
+                            class="text-rotate">Компетенции</span></th>
+                    <td style="border-radius: 0 0 10px 0;    background-color: #F3E6FE;">
+                        <ul class="skills-table"
+                            style="text-align: left; list-style-image: none; list-style-type: disc; padding-left: 2rem; font-size: 16px;">
+                            {% for elem in skills.backend %}
+                            <li style="list-style-image: none; list-style-type: disc; font-size: 22px;">{{elem}}</li>
+                            {% endfor %}
+
+                            {% for elem in skills.designer %}
+                            <li style="list-style-image: none; list-style-type: disc; font-size: 22px;">{{elem}}</li>
+                            {% endfor %}
+
+                            {% for elem in skills.hard %}
+                            <li style="list-style-image: none; list-style-type: disc; font-size: 22px;">{{elem}}</li>
+                            {% endfor %}
+
+                            {% for elem in skills.frontend %}
+                            <li style="list-style-image: none; list-style-type: disc; font-size: 22px;">{{elem}}</li>
+                            {% endfor %}
+
+                            {% for elem in skills.soft %}
+                            <li style="list-style-image: none; list-style-type: disc; font-size: 22px;">{{elem}}</li>
+                            {% endfor %}
+
+                        </ul>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+                <div class="photo-container">
+                    {% if photo %}
+                    <div class="profile-ava" style=""><img src="{{photo.url}}" class="photo-check-profile"></div>
+                    {% else %}
+                    <div class="profile-ava" style=""><img src="{% static 'PersonalArea/img/photo.png' %}"
+                                                           class="photo-check-profile"></div>
+                    {% endif %}
+                </div>
+                <div style="margin-top: auto; margin-bottom: auto;">
+                    <div style="display: grid;">
+                        <div style="display: grid; width: 100%">
+
+                            <form action="{{ url_for('profile_student', id=id )}}" method="post"
+                                  style="padding: 0; padding-top: 20px;">
+                                <!--
+                                                            <div>
+                                                                <label class="check" for="ch">
+                                                                    <input type="checkbox" name="accept" id="ch" class="checkbox1">Отправить приглашение
+                                                                </label>
+                                                            </div>
+                                                            -->
+                                <button type="submit" name="continue" class="btn btn-primary btn-lg  "
+                                        style="width: 100%">
+                                    Отправить приглашение
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

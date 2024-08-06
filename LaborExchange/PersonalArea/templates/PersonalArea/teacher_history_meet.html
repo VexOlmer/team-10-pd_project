@@ -1,0 +1,31 @@
+{% extends 'PersonalArea/base_teacher.html' %}
+{% load static %}
+
+{% block content_teacher %}
+
+        <div class="log-body">
+            <div class="student-info" style="overflow-y: auto;overflow-x: hidden;height: 600px; ">
+                <table style="width: 95%">
+                    <tbody>
+                        <tr style="height: 12%;">
+                            <th>Номер команды</th>
+                            <th>Лидер</th>
+                            <th>Дата проведения</th>
+                            <th>Место проведения</th>
+                            <th>Описание</th>
+                        </tr>
+                        {% for meet in meets %}
+                            <tr>
+                                <th> {{meet.number}}  </th>
+                                <th> {{meet.fio}}   </th>
+                                <th> <input type="datetime-local" value="{{meet.time}}"> </th>
+                                <th> {{meet.place}}   </th>
+                                <th> {{meet.desc}}   </th>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+{% endblock content_teacher%}

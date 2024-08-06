@@ -1,0 +1,416 @@
+{% extends 'PersonalArea/base_teacher.html' %}
+{% load static %}
+
+{% block content_teacher %}
+
+{% comment %} Моадльное для преложения встречи курироемой команде {% endcomment %}
+<div class="modal fade" id="add_meet_curator_team" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true" data-backdrop="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="modal-dashed" style="padding-top: 5px;">
+                    <h5 style=" font-size: 1.5em; text-align: center; margin-bottom: 0px;">Встреча с курируемой
+                        командой</h5>
+                    <form action="{% url 'teacher_meet_team' %}" autocomplete=off name="platform"
+                          method="post"
+                          id="form-save-team" style="margin-top: 10px; margin-bottom: 10px;">
+                        {% csrf_token %}
+                        <label for="message2" style="margin-bottom: 15px;">Команда:</label>
+                        <p>
+                            <select name="select" class="form-select form-select-sm"
+                                    aria-label=".form-select-sm example" size="3" multiple>
+                                {% for team in teams_cur %}
+                                <option value="{{team.leader_id}}"> Команда {{team.number}}, Лидер - {{team.fio}}, Тема
+                                    -
+                                    {{team.themes}}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </p>
+                        <label for="message2" style="margin-bottom: 15px;">Время:</label>
+                        <input type="datetime-local" name='time'>
+                        <div>
+                            <label for="message3" style="margin-bottom: 15px;"
+                                   class="textarea-message">Площадка:</label>
+                            <textarea id="message3" name="place"
+                                      style="width: 100%; resize: none;" maxlength="140"></textarea>
+                        </div>
+                        <div>
+                            <label for="message_description" class="textarea-message">Цель встречи:</label>
+                            <textarea id="message_description" name="desc"
+                                      style="width: 100%; resize: none;" maxlength="140"></textarea>
+                        </div>
+                    </form>
+                    <div class="modal-footer-close-btn"
+                         style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 30px;">
+                        <input type="submit" class="btn btn-secondary" value="Сохранить"
+                               form="form-save-team" name="new_meet_team"
+                               style="width: 100%; margin-left: auto; margin-right: auto;">
+                        <input type="button" class="btn btn-secondary" data-dismiss="modal"
+                               value="Закрыть" name="close-btn"
+                               style="width: 100%; margin-left: auto; margin-right: auto;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-calendar" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 100%;">
+        <div class="modal-content" style="padding: 20px;">
+            <div class="modal-body modal-body-calendar">
+                <form action="#" autocomplete=off name="platform" method="post"
+                      id="form-calendar">
+                    {% csrf_token %}
+                    <div class="log-body">
+                        <div class="desktop">
+                            {% if page_obj|length == 0 %}
+                            <h2 style=" font-size: 1.5em; text-align: center; margin-bottom: 0px;">На данный у момент
+                                Вас не было ни одной встречи </h2>
+                            {% else %}
+                            <div class="student-info" style="overflow-y: auto;overflow-x: auto;max-height: 600px; font-size:0.7em;">
+                                <table style="width: 95%; ">
+                                    <tbody>
+                                    <tr style="height: 12%;">
+                                        <th>Дата проведения</th>
+                                        <th>Место проведения</th>
+                                        <th>С кем</th>
+                                        <th>Описание</th>
+                                        <th>Статус</th>
+                                    </tr>
+                                    {% for meet in page_obj %}
+                                    <tr>
+                                        <th>{{meet.time}}</th>
+                                        <td style=""> {{meet.place}}</td>
+                                        <td> {{meet.who}}</td>
+                                        <td> {{meet.desc}}</td>
+                                        <td style="padding: 7px;">
+                                            <div>
+                                            {% if meet.status == '1' %}
+                                            <span class="meeting-done">Встреча состоялась</span>
+                                            {% else %}
+                                            {% if meet.who_sent == 'curator' and meet.status == '-1'%}
+                                            <span class="meeting-wait">Ожидается подтверждение</span>
+                                            </div>
+                                            {% elif meet.status == '-1' %}
+                                            <button type="submit" class="btn btn-secondary" value="{{meet.id_meet}}"
+                                                    form="form-calendar" name="accept_meet"
+                                                    style="padding: 5px;  margin-left: auto; margin-right: auto;">
+                                                Принять
+                                            </button>
+                                            {% else %}
+                                            <button type="submit" class="btn btn-secondary" value="{{meet.id_meet}}"
+                                                    form="form-calendar" name="accept_meet"
+                                                    style="padding: 5px; margin-left: auto; margin-right: auto;">
+                                                Состоялась
+                                            </button>
+                                            {% endif %}
+                                            <button type="submit" class="btn btn-secondary" value="{{meet.id_meet}}"
+                                                    form="form-calendar" name="reject_meet"
+                                                    style="padding: 5px; margin-left: auto; margin-right: auto;">
+                                                Удалить
+                                            </button>
+                                            {% endif %}
+                                        </td>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="student-info mobile"
+                                 style="overflow-y: auto;overflow-x: auto;max-height: 600px; ">
+                                <table style="width: 95%;  table-layout: fixed;">
+                                    <tbody>
+                                    <tr style="height: 12%;">
+                                        <th>Дата проведения</th>
+                                        <th>Место проведения</th>
+                                        <th>С кем</th>
+                                        <th>Описание</th>
+                                        <th>Статус</th>
+                                    </tr>
+                                    {% for meet in page_obj %}
+                                    <tr>
+                                        <th>{{meet.time}}</th>
+                                        <td style=" table-layout: fixed;"> {{meet.place}}</td>
+                                        <td> {{meet.who}}</td>
+                                        <td> {{meet.desc}}</td>
+                                        <td>
+                                            {% if meet.status == '1' %}
+                                            <span class="meeting-done">Встреча состоялась</span>
+                                            {% else %}
+                                            {% if meet.who_sent == 'curator' and meet.status == '-1'%}
+                                            <span class="meeting-wait">Ожидается подтверждение</span>
+                                            {% elif meet.status == '-1' %}
+                                            <button type="submit" class="btn btn-secondary" value="{{meet.id_meet}}"
+                                                    form="form-calendar" name="accept_meet"
+                                                    style="width: 100%; margin-left: auto; margin-right: auto;">
+                                                Принять
+                                            </button>
+                                            {% else %}
+                                            <button type="submit" class="btn btn-secondary" value="{{meet.id_meet}}"
+                                                    form="form-calendar" name="accept_meet"
+                                                    style="width: 100%; margin-left: auto; margin-right: auto;">
+                                                Состоялась
+                                            </button>
+                                            {% endif %}
+                                            <button type="submit" class="btn btn-secondary" value="{{meet.id_meet}}"
+                                                    form="form-calendar" name="reject_meet"
+                                                    style="width: 100%; margin-left: auto; margin-right: auto;">
+                                                Удалить
+                                            </button>
+                                            {% endif %}
+                                        </td>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        {% comment %} Отображение списка страниц для истории встреч {% endcomment %}
+                        {% if page_obj|length != 0 %}
+                        <nav class="list-pages">
+                            <ul>
+                                {% if page_obj.has_previous %}
+                                <li class="page-num">
+                                    <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+                                </li>
+                                {% endif %}
+                                {% for p in page_obj.paginator.page_range %}
+                                {% if page_obj.number == p %}
+                                <li class="page-num page-num-selected">{{ p }}</li>
+                                {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                                <li class="page-num">
+                                    <a href="?page={{ p }}">{{ p }}</a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                <li class="page-num">
+                                    <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+                    </div>
+                </form>
+                <div class="modal-section" style="display: block;">
+                    <div class="logo">
+                        <img class="logo-img" src="{% static 'PersonalArea/img/logo.svg' %}" alt="logo">
+                        <span class="logo-description">HELLO <br> TEAM! </span>
+                        <img class="triangle" src="{% static 'PersonalArea/img/triangle.png' %}" alt="triangle">
+                    </div>
+                   <div style="display: grid; row-gap: 20px;">
+                    <input type="submit" class="btn btn-secondary" data-dismiss="modal"
+                           value="Закрыть" name="close-btn"
+                           style="width: 100%; margin-left: auto; margin-right: auto;">
+                    <button type="button" class="btn btn-secondary" data-toggle="modal"
+                            data-target="#add_meet_curator_team"
+                            style="width: 100%; margin-left: auto; margin-right: auto;" data-dismiss="modal">
+                        Предложить встречу курируемой команде
+                    </button>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<body>
+
+{% if teams_cur|length == 0 %}
+<h2 style=" font-size: 1.5em; text-align: center; margin-bottom: 0px;">На данный момент Вы не курируите ни одну
+    команду.
+    Чтобы стать куратором какой-то команды назначьте ей тему </h2>
+{% endif %}
+{% if teams_cur|length != 0 %}
+<form action="" autocomplete=off name="platform" method="post"
+      id="form-save">
+    {% csrf_token %}
+    <div class="log-body">
+        <div style="display: grid; justify-content: center;">
+            <button type="button" class="btn btn-primary" data-target="#modal-calendar" data-toggle="modal"
+                    style="font-size: 1.3em; margin-left: auto; margin-right: auto;">
+                Посмотреть календарь встреч
+            </button>
+        </div>
+        <h2 style=" font-size: 1.5em; text-align: center; margin-bottom: 0px;">
+            Ближайшие встречи с курируемыми командами</h2>
+        <div class="student-info">
+            <table style="width: 100%">
+                <tbody>
+                <tr style="height: 12%;">
+                    <th>Номер команды</th>
+                    <th>Лидер</th>
+                    <th>Тема</th>
+                    <th>Дата проведения</th>
+                    <th>Место проведения</th>
+                </tr>
+                {% for team in teams_cur %}
+                <tr>
+                    <th> {{team.number}}</th>
+                    <th> {{team.leader}}</th>
+                    <th> {{team.themes}}</th>
+                    <th>{{team.time}}</th>
+                    <th>{{team.place}}</th>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="student-info mobile">
+        <table style="width: 100%">
+            <tbody>
+            <tr style="height: 12%;">
+                <th>Номер команды</th>
+            </tr>
+            {% for team in teams_cur %}
+            <tr>
+                <td class="dropdown">
+                    <div onclick="myFunction()" class="dropbtn"><span class="" style="display: inline-block;"
+                    >{{team.number}}</span>
+                        <img class="" src="/static/PersonalArea/img/open-arrow.svg"></div>
+                    <div class="dropdown-content myDropdown">
+                        <table class="dropdown-table">
+                            <tbody>
+                            <tr>
+                                <th>Лидер</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {{team.leader}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Тема
+                                </th>
+                            </tr>
+                            <tr>
+                                {% if team.themes != '' %}
+                                <td>{{team.themes}}</td>
+                                {% else %}
+                                <td style="color: red;">Тема не назначена</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <th>
+                                    Дата проведения
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {{team.time}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Место проведения
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {{team.place}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</form>
+{% endif %}
+
+</body>
+
+<script>
+function myFunction() {
+  drp = document.querySelectorAll(".myDropdown")
+  drbtn = document.querySelectorAll(".dropbtn")
+  for (let i = 0; i < drp.length; i++)
+  {
+  drbtn[i].onclick = function()
+  {
+
+    drp[i].classList.toggle("show");
+    };
+  }
+}
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+
+
+
+</script>
+
+<script>
+    var textArea = document.querySelectorAll("textarea");
+let save_btn = document.querySelectorAll('[name="save-btn"]');
+let symbols = document.querySelectorAll('.show-symbol-length');
+
+for (let i = 0; i < textArea.length; i++)
+{
+
+textArea[i].value = '';
+textArea[i].oninput = function () {
+ symbols[i].textContent = textArea[i].value.length + "/140";
+ if (textArea[i].value.length >= 140)
+    {
+
+            save_btn[i].disabled = true;
+            symbols[i].style.color = "red";
+    }
+    else
+    {
+        save_btn[i].disabled = false;
+        symbols[i].style.color = "black";
+    }
+}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+{% endblock content_teacher %}

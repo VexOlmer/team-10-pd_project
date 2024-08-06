@@ -1,0 +1,137 @@
+{% extends 'PersonalArea/base_full.html' %}
+{% load static %}
+
+{% block content %}
+
+<body>
+
+<div class="modal fade" id="myLeha" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+     data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered show-LEHA" id = "modal-d-auth1" role="document">
+        <div class="modal-content">
+            <div class="modal-dashed">
+                <div><img class="LEHA1" src="{% static 'PersonalArea/img/LEHA1.svg' %}"></div>
+                <div class="modal-body modal-auth-body">
+                    <div style="display: grid;">
+                        <p class="LEHA1-description" style="user-select: none;">Приветствую Вас на сайте по подбору команды на студенческий проект.
+                            Я Ваш
+                            интеллектуальный помощник «Лёха».
+                            Зарегистрируйтесь, чтобы продолжить работу на ресурсе. Процедура регистрации займёт всего
+                            несколько
+                            минут! </p>
+                        <div class="modal-footer-close-btn modal-f-auth-1">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" style="">Закрыть
+                            </button>
+                            <button type="button" class="btn btn-secondary next-modal" data-dismiss="modal"
+                                    data-toggle="modal"
+                                    data-target="#myModal">Продолжить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin:auto;">
+    <div class="modal-dialog modal-dialog-centered reg-modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Регистрация нового профиля</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5 class="modal-title" style="text-align: center; padding: 10px; font-size: 22px">Кто Вы?</h5>
+                <div class="reg-window" style="display: grid; grid-template-columns: 1fr; text-align: center;">
+                    <a href="{% url 'student_register' %}" class="a-reg" style="font-size: 22px"> Студент </a>
+
+                    <a href="{% url 'teacher_register' %}" class="a-reg" style="font-size: 22px"> Сотрудник кафедры </a>
+                </div>
+            </div>
+           <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<main style="">
+    <div class="log-form-auto log-reg">
+        <div class="logo">
+            <img class="logo-img" src="{% static 'PersonalArea/img/logo.svg' %}" alt="logo">
+            <span class="logo-description">HELLO <br> TEAM! </span>
+            <img class="triangle" src="{% static 'PersonalArea/img/triangle.png' %}" alt="triangle">
+        </div>
+        <div class="login">
+            <div class="log-header auth-header">
+                <span class="log-desc">Войдите в систему или зарегистрируйтесь</span></div>
+            <div class="log-body">
+
+                <form action="{% url 'home_auth' %}" method="post">
+                    {% csrf_token %}
+
+                    <div class="form-error">{{ form.non_field_errors }}</div>
+                    <!--{% if form.errors %}
+                        Почта или пароль введены неправильно. Пожалуйста, повторите еще раз.
+                    {% endif %} -->
+
+                    {% for f in form %}
+                        <div class="form-group">
+                            {% comment %} <label class="form-label" for="{{ f.id_for_label }}"></label> {% endcomment %}
+                            {{ f }}
+                        </div>
+                        <div class="form-error">
+                            {{ f.errors }}
+                        </div>
+                    {% endfor %}
+
+                    <div style="text-align: center;">
+                        <button type="submit" class="btn btn-primary btn-lg" style="width: 149px;">Войти</button>
+                    </div>
+                </form>
+
+            </div>
+
+            <div class="log-footer p-0">
+                <div class="log-footer-item log-footer-item-bordered">
+                    <a href="#" data-target="#myLeha" data-toggle="modal" class="footer-link reg">Зарегистрироваться</a>
+                </div>
+
+                <div class="log-footer-item log-footer-item-bordered">
+                    <a href="#" class="footer-link">Забыли пароль?</a>
+                </div>
+
+                {% if request.user.is_authenticated %}
+                <div class="log-footer-item log-footer-item-bordered">
+                    <a href="#" class="footer-link">Ага, он авторизован</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+
+{% comment %} <footer class="page-footer">
+
+    <span class="copyright">Омский государственный технический университет © 2022 Все права защищены</span> {% endcomment %}
+
+</footer>
+<script src="{% static 'PersonalArea/js/show-LEHA.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/js/bootstrap.min.js"
+        integrity="sha512-UR25UO94eTnCVwjbXozyeVd6ZqpaAE9naiEUBK/A+QDbfSTQFhPGj5lOR6d8tsgbBk84Ggb5A3EkjsOgPRPcKA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+{% comment %} <script src="{{url_for('static', filename='index-register-window.js')}}"></script> {% endcomment %}
+
+</body>
+
+{% endblock content %}

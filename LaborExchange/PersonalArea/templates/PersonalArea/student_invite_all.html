@@ -1,0 +1,27 @@
+{% extends 'PersonalArea/base_student.html' %}
+{% load static %}
+
+{% block content_student %}
+
+<main>
+    <div class="log-body">
+        {% if invites|length == 0 %}
+        <h2 style=" font-size: 1.5em; text-align: center; margin-bottom: 0px;">На данный момент приглашений нет</h2>
+        {% endif %}
+        {% if invites|length > 0 %}
+        <div class="student-info">
+            <table style="width: 100%">
+                <tbody>
+                {% for invite in invites %}
+                <tr>
+                    <th><a href="{% url 'student_invite_team' student_id=invite.id %}">{{invite.fio}}</a></th>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</main>
+
+{% endblock %}
